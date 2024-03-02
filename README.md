@@ -15,11 +15,11 @@ Same for run
 
 * Pre-Requirements
   =============================
-  install the following debendecies to be able to use the script
+  install the following debendecies to be able to use the script { 
   tree
   expr
   coreutil
-  ack
+  ack }
 
 * Features *
   ===============================

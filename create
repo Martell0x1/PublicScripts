@@ -30,7 +30,7 @@ create(){
 using namespace std;
 
 int main(int argc, char *argv[]) {
-
+    ios::sync_with_stdio(0);cin.tie();
     //code here
 
     return 0;

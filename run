@@ -1,0 +1,90 @@
+#!/bin/bash
+
+Norm="\u001b[38;5;33m"
+ERR="\033[31;1m"
+TXT="\u001b[38;5;189m"
+ADV="\033[36;1m"
+RUN="\u001b[38;5;226m"
+RST="\e[0m"
+PL="\033[1;36m"
+SUCC="\u001b[38;5;118m"
+
+err_redir="0";
+filename=""
+mode=""
+E_time=""
+
+print(){
+    echo -e $1;
+}
+
+help(){
+    print "Usage: [filename] [options]"
+    print "options: "
+    print "\t-f | --filename | the cpp file(s)\n
+\t-n | --normal | normal mode for single files (no header files)\n
+\t-a | --advanced | advanced mode for oop work and header files\n"
+
+}
+
+
+compNorm(){
+    print "$PL[ ... ]$RST $TXT Building $1......$RST"
+    if g++ "src/$1.cpp" -o "bin/$1" ; then
+        print "$PL[ + ]$RST $SUCC $1 Built Successfully.!  $Norm(Normal mode).....$RST"
+    else
+        err_redir="ERR";
+    fi
+
+}
+
+compADV(){
+    print "$PL[ + ]$RST $Norm Building $1 and $2 .....$RST"
+    cmd=g++ "src/$1.cpp" -o "bin/$1"
+    if $cmd "src/$1.cpp src/$2.cpp" -o "bin/$1" ; then
+        print "$PL[ + ]$RST $SUCC $1 Built Successfully.!  $ADV(Advanced mode)....$RST"
+    else
+        err_redir="ERR";
+    fi
+
+}
+
+run(){
+    if [[ "$err_redir" == "ERR" ]] ;then
+
+        print "$ERR[ - ] An Error Occured During Building Process...$RST"
+        cat .log;
+        print "$ERR [ - ] Stoping Excution....$RST"
+
+    else
+        print "$PL[ + ]$RST $SUCC Running $1 $RST......";
+        print "$RUN"
+        start=$(date +%s.%N)
+       	echo $("./bin/$1")
+	print "$RST"
+        end=$(date +%s.%N)
+        t=$(echo "($end - $start) * 1000" | bc)
+	echo -n -e "$PL[ ! ] Algorithm Excution Time: $RST"
+	printf "%3f" $t
+	echo -n -e "(ms)\n"
+	print "$PL[ ! ]$RST The Time Would Be Less than That !"
+    fi
+}
+
+if [ "$1" == "" ] | [ $# -eq 0 ];then
+    help;
+    exit 1;
+
+elif [ $# -eq 4 ] & [ "$4" == '-a' ]; then
+    compADV $2 $3
+
+elif [ $# -eq 4 ] & [ "$3" == '-n' ]; then
+    compNorm $2
+else
+	print "$PL[-] $ERR Unkown Option $RST"
+	help
+fi
+
+
+run $2 $3
+

@@ -1,0 +1,99 @@
+#!/bin/bash
+
+TXT="\u001b[38;5;189m"
+ERR="\033[31;1m"
+SUCC="\u001b[38;5;118m"
+Norm="\u001b[38;5;33m"
+ADV="\033[36;1m"
+PL="\033[1;36m"
+RST="\e[0m"
+
+
+print(){
+    echo -e $1;
+}
+
+help(){
+    print "Usage: [filename] [options]"
+    print "options: "
+    print "\t-f | --filename | the cpp file(s)\n
+\t-n | --normal | normal mode for single files (no header files)\n
+\t-a | --advanced | advanced mode for oop work and header files\n"
+}
+
+create(){
+    if [ "$1" == "-n" ] ; then
+        echo "//This File Created / excuted uing a bash script , made by [ Martell ] copywrite @2024
+
+#include <iostream>
+
+using namespace std;
+
+int main(int argc, char *argv[]) {
+
+    //code here
+
+    return 0;
+}" > "src/$2.cpp"
+    else
+        echo "//This File Created / excuted uing a bash script , made by [ Martell ] copywrite @2024
+//main file
+
+#include <iostream>
+#include <$3>
+using namespace std;
+int main(int argc, char *argv[]) {
+
+    //code here
+
+    return 0;
+}" > "src/$2.cpp"
+
+        echo "//This File Created / excuted uing a bash script , made by [ Martell ] copywrite @2024
+//header file
+
+class $3{
+    public:
+        //public
+    private:
+        //private
+
+};" > "header/$3.h"
+        echo "
+//This File Created / excuted uing a bash script , made by [ Martell ] copywrite @2024
+// implementation file
+
+$3::$3(){
+    // constructor
+}" > "src/$3.cpp"
+
+fi
+}
+
+if [[ "$1" == "" ]];then
+    help;
+    exit 1;
+fi
+
+if [ $# -eq 4 ] & [ "$4" == '-a' ]; then
+    print "$PL[ + ]$RST Creating $2 and $3 $RST in $ADV (Advanced Mood)....$RST"    
+    if create $4 $2 $3 ; then
+        print "$PL[ + ]$RST $2 and $3 $SUCC Created Successfully..!$RST"
+    else
+        print "$PL[ - ]$RST $ERR An Error Ocuured During Creation process $RST"
+
+    fi
+fi
+
+if [ $# -eq 3 ] & [ "$3" == '-n' ]; then
+    print "$PL[ + ]$RST Creating $2 $RST in $ADV (Normal Mood)....$RST"
+
+    if create $3 $2 ; then 
+        print "$PL[ + ]$RST $2 $SUCC Created Successfully..!$RST"
+    else
+        print "$PL[ - ]$RST $ERR An Error Ocuured During Creation process $RST"
+
+    fi 
+fi
+
+tree . | ack --passthru "$2.cpp"

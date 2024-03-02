@@ -8,9 +8,10 @@ Usage
 ==========================
 
 ./create -f [filename] -m [mode]
-./create -h for more help
 
-same for run
+./create for more help
+
+Same for run
 
 * Features *
   ===============================

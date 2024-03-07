@@ -13,6 +13,8 @@ err_redir="0";
 filename=""
 mode=""
 E_time=""
+Flag=false
+time=""
 
 print(){
     echo -e $1;
@@ -30,18 +32,26 @@ help(){
 
 compNorm(){
     print "$PL[ ... ]$RST $TXT Building $1......$RST"
-    if g++ "src/$1.cpp" -o "bin/$1" ; then
-        print "$PL[ + ]$RST $SUCC $1 Built Successfully.!  $Norm(Normal mode).....$RST"
+    cmd=g++ "src/$1.cpp" -o "bin/$1"
+    flag=true
+    start=$(date +%s.%N)
+    $cmd
+    end=$(date +%s.%N)
+
+    if $flag ; then
+        print "$PL[ + ]$RST $SUCC $1 BuilT Successfully.!  $Norm(Normal mode).....$RST"
+        time=$(echo "($end - $start) * 1000" | bc)
+ 
     else
         err_redir="ERR";
+        flag=false
     fi
 
 }
 
 compADV(){
     print "$PL[ + ]$RST $Norm Building $1 and $2 .....$RST"
-    cmd=g++ "src/$1.cpp" -o "bin/$1"
-    if $cmd "src/$1.cpp src/$2.cpp" -o "bin/$1" ; then
+    if g++ "src/$1.cpp src/$2.cpp" -o "bin/$1" ; then
         print "$PL[ + ]$RST $SUCC $1 Built Successfully.!  $ADV(Advanced mode)....$RST"
     else
         err_redir="ERR";
@@ -59,16 +69,15 @@ run(){
     else
         print "$PL[ + ]$RST $SUCC Running $1 $RST......";
         print "$RUN"
-        start=$(date +%s.%N)
-       	echo $("./bin/$1")
-	print "$RST"
-        end=$(date +%s.%N)
-        t=$(echo "($end - $start) * 1000" | bc)
-	echo -n -e "$PL[ ! ] Algorithm Excution Time: $RST"
-	printf "%3f" $t
-	echo -n -e "(ms)\n"
-	print "$PL[ ! ]$RST The Time Would Be Less than That !"
+        "./bin/$1"
     fi
+}
+
+showTime(){
+        echo -n -e "$PL[ ! ] Algorithm Excution Time: $RST"
+        printf "%3f" $time
+        echo -n -e "(ms)\n"
+        print "$PL[ ! ]$RST The Time Would Be Less than That !"
 }
 
 if [ "$1" == "" ] | [ $# -eq 0 ];then
@@ -87,4 +96,5 @@ fi
 
 
 run $2 $3
+showTime
 

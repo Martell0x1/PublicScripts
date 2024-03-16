@@ -69,12 +69,22 @@ $3::$3(){
 
 fi
 }
+initD(){
+    if [ $(test -d header ; echo $?) ]; then
+        print "$PL [....]$RST Initializing the Current Directory...$RST"
+        mkdir bin header src
+        print "$PL[ + ]$RST Successfully Initialized !$RST"
+    else
+        print "$PL[ + ]$RST The Workspace Already Initialized$RST"
+    fi
+}
+
 
 if [[ "$1" == "" ]];then
     help;
     exit 1;
 fi
-
+initD
 if [ $# -eq 4 ] & [ "$4" == '-a' ]; then
     print "$PL[ + ]$RST Creating $2 and $3 $RST in $ADV (Advanced Mood)....$RST"    
     if create $4 $2 $3 ; then

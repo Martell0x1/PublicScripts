@@ -32,7 +32,7 @@ help(){
 
 compNorm(){
     print "$PL[ ... ]$RST $TXT Building $1......$RST"
-    cmd=g++ "src/$1.cpp" -o "bin/$1"
+    cmd=$(g++ "src/$1.cpp" -o "bin/$1")
     flag=true
     start=$(date +%s.%N)
     $cmd
